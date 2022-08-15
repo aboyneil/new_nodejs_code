@@ -4,9 +4,22 @@ const accounts = mongoose.model(
     "accounts",
     mongoose.Schema(
         {
-        name: String,
-        username: String,
-        email: String,
+        name: {
+            type: String,
+            require: true,
+        },
+        username: {
+            type: String,
+            require: true,
+            unique: true,
+
+        },
+        email: {
+            type: String,
+            require: true,
+            unique: true,
+
+        },
         mobileNumber: String,
         password: String,
         },

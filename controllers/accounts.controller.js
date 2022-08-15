@@ -17,16 +17,20 @@ exports.create = (req, res, next) => {
                 password: req.body.password,
             };
 
-            accountServices.createAccounts(model, (error, results)=>{
-                if(error){
-                    return next(error);
-                } else {
-                    return res.status(200).send({
-                        message: "Success",
-                        data: results
-                    });
-                }
-            });
+
+
+                accountServices.createAccounts(model, (error, results)=>{
+                    if(error){
+                        return next(error);
+                    } else {
+                        return res.status(200).send({
+                            message: "Success",
+                            data: results
+                        });
+                    }
+                });
+
+            
         }
     });
 };
