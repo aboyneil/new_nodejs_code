@@ -6,47 +6,22 @@ var bcrypt = require('bcrypt');
 
 async function createAccounts(params, callback){
     const salt = await bcrypt.genSalt(10);
-    // if(!params.name){
-    //     return callback(
-    //         {
-    //             message: "Name Required", 
-    //         },
-    //         ""
-    //     );
-    // } else if(!params.password){
-    //     return callback(
-    //         {
-    //             message: "Password Required",
-    //         },
-    //         ""
-    //     );
-    // }
+    if(!params.name){
+        return callback(
+            {
+                message: "Name Required", 
+            },
+            ""
+        );
+    } else if(!params.password){
+        return callback(
+            {
+                message: "Password Required",
+            },
+            ""
+        );
+    }
 
-
-        //Check if username already exist
-    //     accounts.find({username: params.username, email:params.email}).then( async (response)=>{
-    //     if(response){
-    //         return callback({
-    //             message: "Account already exist"
-    //         });
-    //     }else{
-
-    //         params.password= await bcrypt.hash(params.password, salt);
-
-    //         const accountModel = accounts(params);
-    //             accountModel
-    //         .save()
-    //         .then((response) => {
-    //             return callback(null, response);
-    //         })
-    //         .catch((error)=>{
-    //             return callback(error);
-    //         });
-            
-    //     }
-    // }).catch((error)=>{
-    //     return callback(error);
-    // });
 
 
     params.password= await bcrypt.hash(params.password, salt);
