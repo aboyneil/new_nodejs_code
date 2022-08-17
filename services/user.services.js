@@ -1,22 +1,22 @@
-const { accounts } = require("../models/accounts.model");
+const { User } = require("../models/user.model");
 var bcrypt = require('bcrypt');
 const { response } = require("express");
 
 
 
 
-async function createAccounts(params, callback){
+async function createUser(params, callback){
     const salt = await bcrypt.genSalt(10);
     //Check if Email and Username already exist
-    await accounts.findOne({email: params.email}).then(async(response)=>{
+    await User.findOne({email: params.email}).then(async(response)=>{
         if(!response){
             
-            await accounts.findOne({username: params.username}).then(async(response)=>{
+            await User.findOne({username: params.username}).then(async(response)=>{
                 if(!response){
                     params.password= await bcrypt.hash(params.password, salt);
 
-                const accountModel = accounts(params);
-                    accountModel
+                const userModel = User(params);
+                    userModel
                 .save()
                 .then((response) => {
                     if(!response) callback("Account already Exist");
@@ -50,7 +50,7 @@ async function createAccounts(params, callback){
 
 
 
-async function getAccounts(params, callback){
+async function getUser(params, callback){
     const name = params.name;
     var condition = name
     ?   {
@@ -58,7 +58,7 @@ async function getAccounts(params, callback){
         }
     :   {};
 
-    accounts
+    User
     .find(condition)
     .then((response) => {
         return callback(null, response);
@@ -69,11 +69,11 @@ async function getAccounts(params, callback){
 }
 
 
-async function getAccountsById(params, callback){
-    const accountId = params.accountId;
+async function getUserById(params, callback){
+    const userId = params.userId;
 
-    accounts
-    .findById(accountId)
+    User
+    .findById(userId)
     .then((response) => {
         if(!response) callback("Account Id Invalid!")
         else return callback(null, response);
@@ -85,11 +85,11 @@ async function getAccountsById(params, callback){
 
 
 
-async function updateAccounts(params, callback){
-    const accountId = params.accountId;
+async function updateUser(params, callback){
+    const userId = params.userId;
 
-    accounts
-    .findByIdAndUpdate(accountId, params, {useFindAndModify: false})
+    User
+    .findByIdAndUpdate(userId, params, {useFindAndModify: false})
     .then((response) => {
         if(!response) callback("Account Id Invalid!")
         else return callback(error);
@@ -100,11 +100,11 @@ async function updateAccounts(params, callback){
 }
 
 
-async function deleteAccounts(params, callback){
-    const accountId = params.accountId;
+async function deleteUser(params, callback){
+    const userId = params.userId;
 
-    accounts
-    .findByIdAndRemove(accountId)
+    User
+    .findByIdAndRemove(userId)
     .then((response) => {
         if(!response) callback("Account Id Invalid!")
         else return callback(null, response);
@@ -116,10 +116,10 @@ async function deleteAccounts(params, callback){
 
 
 module.exports = {
-    createAccounts,
-    getAccounts,
-    getAccountsById,
-    updateAccounts,
-    deleteAccounts,
+    createUser,
+    getUser,
+    getUserById,
+    updateUser,
+    deleteUser,
     
 };

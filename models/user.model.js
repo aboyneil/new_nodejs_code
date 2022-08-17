@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const accounts = mongoose.model(
-    "accounts",
+const User = mongoose.model(
+    "User",
     mongoose.Schema(
         {
         name: {
@@ -30,5 +30,5 @@ const accounts = mongoose.model(
 );
 
 module.exports = {
-    accounts
+    User
 }

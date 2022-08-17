@@ -1,5 +1,6 @@
-const accountServices = require("../services/accounts.services");
+const userServices = require("../services/user.services");
 const upload = require("../middleware/upload");
+const { model } = require("mongoose");
 
 exports.create = (req, res, next) => {
     upload(req, res, function(err){
@@ -19,7 +20,7 @@ exports.create = (req, res, next) => {
 
 
 
-                accountServices.createAccounts(model, (error, results)=>{
+            userServices.createUser(model, (error, results)=>{
                     if(error){
                         return next(error);
                     } else {
@@ -39,7 +40,7 @@ exports.findAll = (req, res, next) => {
 
             };
 
-            accountServices.getAccounts(model, (error, results)=>{
+            userServices.getUser(model, (error, results)=>{
                 if(error){
                     return next(error);
                 } else {
@@ -54,11 +55,11 @@ exports.findAll = (req, res, next) => {
 
 exports.findOne = (req, res, next) => {
     var model = {
-        accountId: req.params.id,
+        userId: req.params.id,
 
     };
 
-    accountServices.getAccountsById(model, (error, results)=>{
+    userServices.getUserById(model, (error, results)=>{
         if(error){
             return next(error);
         } else {
@@ -83,7 +84,7 @@ exports.update = (req, res, next) => {
             const path = req.file != undefined ? req.file.path.replace(/\\/g, "/") : "";
 
             var model = {
-                accountId: req.params.id,
+                userId: req.params.id,
                 name: req.body.name,
                 username: req.body.username,
                 email: req.body.email,
@@ -91,7 +92,7 @@ exports.update = (req, res, next) => {
                 password: req.body.password,
             };
 
-            accountServices.updateAccounts(model, (error, results)=>{
+            userServices.updateUser(model, (error, results)=>{
                 if(error){
                     return next(error);
                 } else {
@@ -108,11 +109,11 @@ exports.update = (req, res, next) => {
 
 exports.delete = (req, res, next) => {   
     var model = {
-        accountId: req.params.id,
+        uesrId: req.params.id,
 
     };
 
-    accountServices.deleteProducts(model, (error, results)=>{
+    userServices.deleteUser(model, (error, results)=>{
         if(error){
             return next(error);
         } else {
