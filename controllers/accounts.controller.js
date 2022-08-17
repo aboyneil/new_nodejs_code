@@ -23,10 +23,7 @@ exports.create = (req, res, next) => {
                     if(error){
                         return next(error);
                     } else {
-                        return res.status(200).send({
-                            message: "Success",
-                            data: results
-                        });
+                        return res.status(200).send("success");
                     }
                 });
 
@@ -73,6 +70,8 @@ exports.findOne = (req, res, next) => {
     });
 
 };
+
+
 
 
 exports.update = (req, res, next) => {

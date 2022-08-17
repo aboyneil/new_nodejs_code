@@ -1,40 +1,48 @@
 const { accounts } = require("../models/accounts.model");
 var bcrypt = require('bcrypt');
+const { response } = require("express");
 
 
 
 
 async function createAccounts(params, callback){
     const salt = await bcrypt.genSalt(10);
-    if(!params.name){
-        return callback(
-            {
-                message: "Name Required", 
-            },
-            ""
-        );
-    } else if(!params.password){
-        return callback(
-            {
-                message: "Password Required",
-            },
-            ""
-        );
-    }
+    //Check if Email and Username already exist
+    await accounts.findOne({email: params.email}).then(async(response)=>{
+        if(!response){
+            
+            await accounts.findOne({username: params.username}).then(async(response)=>{
+                if(!response){
+                    params.password= await bcrypt.hash(params.password, salt);
 
+                const accountModel = accounts(params);
+                    accountModel
+                .save()
+                .then((response) => {
+                    if(!response) callback("Account already Exist");
+                    else return callback(null);
+                })
+                .catch((error)=>{
+                    return callback(error);
+                });
 
-
-    params.password= await bcrypt.hash(params.password, salt);
-
-            const accountModel = accounts(params);
-                accountModel
-            .save()
-            .then((response) => {
-                return callback(null, response);
+                }
+                else{
+                    return callback("Username Already Exist");
+                }
+            }).catch((error)=>{
+                return callback(error);
             })
-            .catch((error)=>{
-                return callback("Account already Exist");
-            });
+        }
+        else {
+            return callback("Email Already Exist");
+        }
+    }).catch((error)=>{
+        return callback(error);
+    })
+
+
+    
  
 
 }
@@ -60,43 +68,6 @@ async function getAccounts(params, callback){
     });
 }
 
-async function verifyAccount(params){
-    const userName = params.username;
-    const eMail = params.email;
-    var array = [];
-
-    let isUsername = new Boolean(false);
-    let isEmail = new Boolean(false);
-
-
-    accounts.findOne({username: userName}).then((response)=>{
-        if(response){
-            array[0] = true;
-        }
-        else{
-            array[0] = false;
-        }
-    }).catch((error)=>{
-        return callback(error);
-    });
-
-    accounts.findOne({email: eMail}).then((response)=>{
-        if(response){
-            array[1] = true;
-        }
-        else{
-            array[1] = false;
-        }
-    }).catch((error)=>{
-        return callback(error);
-    });
-
-    return array;
-
-    
-
-}
-
 
 async function getAccountsById(params, callback){
     const accountId = params.accountId;
@@ -111,6 +82,8 @@ async function getAccountsById(params, callback){
         return callback(error);
     });
 }
+
+
 
 async function updateAccounts(params, callback){
     const accountId = params.accountId;
